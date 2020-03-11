@@ -1,0 +1,11 @@
+C:\PythonScript\testing\obj\Debug\netcoreapp2.1\testing.csprojAssemblyReference.cache
+C:\PythonScript\testing\obj\Debug\netcoreapp2.1\testing.csproj.CoreCompileInputs.cache
+C:\PythonScript\testing\obj\Debug\netcoreapp2.1\testing.AssemblyInfoInputs.cache
+C:\PythonScript\testing\obj\Debug\netcoreapp2.1\testing.AssemblyInfo.cs
+C:\PythonScript\testing\bin\Debug\netcoreapp2.1\testing.deps.json
+C:\PythonScript\testing\bin\Debug\netcoreapp2.1\testing.runtimeconfig.json
+C:\PythonScript\testing\bin\Debug\netcoreapp2.1\testing.runtimeconfig.dev.json
+c:\PythonScript\testing\bin\Debug\netcoreapp2.1\testing.dll
+c:\PythonScript\testing\bin\Debug\netcoreapp2.1\testing.pdb
+c:\PythonScript\testing\obj\Debug\netcoreapp2.1\testing.dll
+c:\PythonScript\testing\obj\Debug\netcoreapp2.1\testing.pdb

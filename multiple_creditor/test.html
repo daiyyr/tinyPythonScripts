@@ -1,0 +1,354 @@
+
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <title>Sapp SMS - Invoice Sending Wizard - step 1</title>
+    <link href="Styles/sub.css" rel="stylesheet" type="text/css" />
+    <link href="Styles/jquery-ui-1.8.11.custom.css" rel="stylesheet" type="text/css" />
+    <link href="Styles/ui.jqgrid.css" rel="stylesheet" type="text/css" />
+    <link href="styles/tabs/Tabs.css" rel="stylesheet" type="text/css" />
+    <link href="styles/calendar/Calendar.css" rel="stylesheet" type="text/css" />
+
+    <script src="scripts/packages/jquery-ui-1.8.18.custom.min.js" type="text/javascript"></script>
+    <script src="Scripts/packages/grid.locale-en.js" type="text/javascript"></script>
+    <script src="Scripts/packages/jquery.jqGrid.min.js" type="text/javascript"></script>
+    <script src="Scripts/packages/json2-min.js" type="text/javascript"></script>
+    <script src="scripts/invoicesend.js?id=4" type="text/javascript"></script>
+
+
+    <script src="https://cloud.tinymce.com/5/tinymce.min.js"></script>
+
+
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    
+    <div id="content_left">
+        <div class="button">
+            <div class="button-title">Next Step</div>
+            <div>
+                <asp:ImageButton ID="ImageButtonNewReport" runat="server" ImageUrl="Images/goright.gif" PostBackUrl="~/invoicesend.aspx" CausesValidation="false" OnClientClick=" return ImageButtonNewReport_ClientClick();" />
+            </div>
+        </div>
+        <div class="button" id="divSendEmail" runat="server" style="display:none">
+            <div class="button-title">Review Email Head</div>
+            <div>
+                <asp:ImageButton ID="ImageButtonSendEmail" ClientIDMode="Static" runat="server" ImageUrl="Images/detail.gif" OnClientClick="return buttonDetails_ClientClick();" />
+                <asp:ImageButton ID="ImageButtonSendEmailHidden" style="display:none" runat="server" ImageUrl="Images/detail.gif" PostBackUrl="~/invoicemails.aspx" OnClientClick="return ImageButtonSendEmail_ClientClick();" />
+            </div>
+            <asp:HiddenField ID="invoiceSent" runat="server" />
+            <asp:HiddenField ID="HiddenInvoiceSendPIN" runat="server" />
+            
+            <div id="pinDialog" title="PIN Form">
+                <label for="txtPIN">
+                    PIN</label>
+                <input type="password" name="txtPIN" id="txtPIN" />
+            </div>
+
+            <div id="dialog" class="form-control" title="Export Options" style="display: none">
+                <select id="exportType">
+                    <option value="2" selected="selected">Print Only</option>
+                </select>
+            </div>
+        </div>
+        <div  class="button">
+            <div class="button-title">Cancel</div>
+            <div>
+                <asp:ImageButton ID="ImageButtonClose" runat="server" ImageUrl="Images/close.gif" CausesValidation="false"  OnClientClick="history.back(); return false;" />
+            </div>
+        </div>
+    </div>
+
+    <div id="content_middle">
+        <table class="details">
+            <tr>
+                <td width="140px"><b>Bodycorp:</b></td>
+                <td>
+                                                <ajaxToolkit:ComboBox ID="ComboBoxBodycorp" runat="server"
+                 AutoPostBack="False"
+                 DropDownStyle="DropDownList"
+                 AutoCompleteMode="SuggestAppend"
+                 CaseSensitive="False"
+                 ItemInsertLocation="Append"
+                 Width="150px">
+                </ajaxToolkit:ComboBox>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Date Between:</b> <asp:CheckBox ID="CheckBoxDate" ClientIDMode="Static" runat="server" />
+                </td>
+                <td>
+                    <asp:TextBox ID="TextBoxStart" runat="server" autocomplete="off" ></asp:TextBox>
+                    <ajaxToolkit:CalendarExtender runat="server" 
+                        ID="CalendarExtender1" CssClass="sappcalendar"
+                        Format="dd/MM/yyyy"
+                        TargetControlID="TextBoxStart">
+                     </ajaxToolkit:CalendarExtender>  
+                    <asp:CustomValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="!" ForeColor="Red"
+                       OnServerValidate="CustomValidatorTextBoxStart_ServerValidate"></asp:CustomValidator>     
+                </td>
+                <td><b> To:</b></td>
+                <td>
+                    <asp:TextBox ID="TextBoxEnd" runat="server" autocomplete="off" ></asp:TextBox>
+                    <ajaxToolkit:CalendarExtender runat="server" 
+                        ID="CalendarExtender2" CssClass="sappcalendar"
+                        Format="dd/MM/yyyy"
+                        TargetControlID="TextBoxEnd">
+                     </ajaxToolkit:CalendarExtender>
+                    <asp:CustomValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="!" ForeColor="Red"
+                       OnServerValidate="CustomValidatorTextBoxEnd_ServerValidate"></asp:CustomValidator>
+                </td>
+            </tr>
+        </table>
+        <br/> 
+        <table class="details">
+            <tr>
+                <td colspan="4"><b>Email</b></td>
+            </tr>
+            <tr>
+                <td width="140px">
+                    <b>Send Statement:</b>
+                </td>
+                <td>
+                     <asp:CheckBox ID="CheckBoxStmt" ClientIDMode="Static" runat="server" />
+                </td>
+                <td><b>Statement Date:</b></td>
+                <td>
+                    <asp:TextBox ID="TextBoxStmtStartDate" ClientIDMode="Static" autocomplete="off"  runat="server"></asp:TextBox>
+                    <ajaxToolkit:CalendarExtender runat="server" ID="CalendarExtender3" CssClass="sappcalendar" Format="dd/MM/yyyy" TargetControlID="TextBoxStmtStartDate"></ajaxToolkit:CalendarExtender>
+                    &nbsp;<b> To:</b>&nbsp;
+                    <asp:TextBox ID="TextBoxStmtEndDate" ClientIDMode="Static" autocomplete="off"  runat="server"></asp:TextBox>
+                    <ajaxToolkit:CalendarExtender runat="server" ID="CalendarExtender4" CssClass="sappcalendar" Format="dd/MM/yyyy" TargetControlID="TextBoxStmtEndDate"></ajaxToolkit:CalendarExtender>
+                </td>
+            </tr>
+            <tr>
+                <td width="140px">
+                    <b>Send Mailmerge:</b>
+                </td>
+                <td>
+                     <asp:CheckBox ID="CheckBoxMailmerge" ClientIDMode="Static" runat="server" />
+                </td>
+                <td><b>Template:</b></td>
+                <td>
+                    <asp:DropDownList ID="DropDownListMailmergeTemplate" runat="server" AutoPostBack="false"></asp:DropDownList>
+                    <br/>
+                    <b>Date:</b>
+                    <asp:TextBox Width="80px" ID="TextBoxMailmergeDate" runat="server"  autocomplete="off" ClientIDMode="Static"></asp:TextBox>
+                    <ajaxToolkit:CalendarExtender runat="server" ID="CalendarExtender5" CssClass="sappcalendar" Format="dd/MM/yyyy" TargetControlID="TextBoxMailmergeDate" />
+                    <br/>
+                    <b>Invoice Number(If Applicable):</b>
+                    <asp:TextBox ID="TextBoxInvoiceNum" runat="server" ClientIDMode="Static"></asp:TextBox>
+                    <br/>
+                </td>
+            </tr>
+            <tr>
+                <td><b>Notes (files with .pdf .doc or .docx extension):</b></td>
+                <td colspan="3">
+
+                    <ajaxToolkit:AjaxFileUpload runat="server" ID="ajaxUpload1" AllowedFileTypes="pdf,doc,docx" AutoStartUpload="True" 
+                     OnUploadComplete="OneFileUploaded"  ClearFileListAfterUpload="false" UseAbsoluteHandlerPath ="false" IsInFileUploadPostBack="true"
+                     />
+                </td>
+            </tr>
+            <tr>
+                <td><b>Send To Tenant:</b></td>
+                <td colspan="3">
+                    <asp:CheckBox ID="CheckBoxSendToTenant" ClientIDMode="Static" runat="server" /> Send To Tenant
+                </td>
+            </tr>
+            <tr style="display:none">
+                <td><b>Email Subject:</b></td>
+                <td colspan="3">
+                    <asp:TextBox ID="TextBoxSubject" runat="server" ClientIDMode="Static" Width="580px" MaxLength="250"></asp:TextBox>
+                </td>
+            </tr>
+            <tr style="display:none">>
+                <td><b>Email Body:</b></td>
+                <td colspan="3">
+                    <div id="div_richbox">
+                        <FTB:FreeTextBox id="TextBoxBody" runat="Server" />
+                    </div>
+
+                </td>
+            </tr>
+        </table>
+        <br/>
+        <table class="details">
+            <tr>
+                <td colspan="4"><b>Invoice List:</b></td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div>
+                        <img src="Images/dot.gif" height="4px" />
+                        <cc1:jqGridAdv runat="server" ID="jqGridInvoice" colNames="['ID','Unit','Inv Num','Debtor','Date','DueDate', 'Total', 'Invoice', 'Statement', 'Mailmerge', 'Notes', 'Tenant']"
+                            colModel="[
+                                { name: 'ID', index: 'ID', width: 50,editable:false, align: 'left', sorttype: 'int', search: true, searchoptions: { sopt: ['eq', 'ne', 'cn', 'nc']} , hidden:true},
+                                { name: 'Unit', index: 'Unit', width: 50, editable:false, align: 'left', search: true,  searchoptions: { sopt: ['eq', 'ne', 'cn', 'nc']}},
+                                { name: 'Num', index: 'Num', width: 50, editable:false, align: 'left', search: true,  searchoptions: { sopt: ['eq', 'ne', 'cn', 'nc']}},
+                                { name: 'Debtor', index: 'Debtor', width: 50, editable:false, align: 'left', search: true,  searchoptions: { sopt: ['eq', 'ne', 'cn', 'nc']}},
+                                { name: 'Date', index: 'Date', width: 50, editable:false, align: 'left', search: true,  searchoptions: { sopt: ['eq', 'ne', 'cn', 'nc']}},
+                                { name: 'DueDate', index: 'DueDate', width: 50, editable:false, align: 'left',search: true,formatter:'date', formatoptions: { srcformat:'d/m/Y', newformat:'d/m/Y' }, searchoptions: { sopt: ['eq','gt','ge','lt','le'],dataInit : function (elem) {  $(elem).datepicker({ changeMonth: true, changeYear: true,  dateFormat: 'dd/mm/yy' });}}},
+                                { name: 'Total', index: 'Total', width: 50, editable:false, align: 'left', search: true,  searchoptions: { sopt: ['eq', 'ne', 'cn', 'nc']}},
+                                { name: 'Invoice', index: 'Invoice', width: 50, editable:false, align: 'center', search: true,  searchoptions: { sopt: ['eq', 'ne', 'cn', 'nc']}},
+                                { name: 'Statement', index: 'Statement', width: 50, editable:false, align: 'center', search: true,  searchoptions: { sopt: ['eq', 'ne', 'cn', 'nc']}},
+                                { name: 'Mailmerge', index: 'Mailmerge', width: 50, editable:false, align: 'center', search: true,  searchoptions: { sopt: ['eq', 'ne', 'cn', 'nc']}},
+                                { name: 'Notes', index: 'Notes', width: 50, editable:false, align: 'center', search: true,  searchoptions: { sopt: ['eq', 'ne', 'cn', 'nc']}},
+                                { name: 'Tenant', index: 'Tenant', width: 50, editable:false, align: 'center', search: true,  searchoptions: { sopt: ['eq', 'ne', 'cn', 'nc']}}
+                            ]"
+                            rowNum="10000"
+                            rowList="[]"
+                            sortname="ID"
+                            sortorder="asc"
+                            viewrecords="true"
+                            multiselect="true"
+                            width="739"
+                            height="300"
+                            url="invoicesend.aspx/jqGridInvoiceDataBind"
+                            hasID="false"
+                            inlineNav="true"
+                            />
+
+                        <asp:HiddenField ID="HiddenSelectedIdxs" runat="server" ClientIDMode="Static" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="content_right">
+        <div class="button">
+            <div class="button-title">Load</div>
+            <div>
+                <asp:ImageButton ID="ImageButtonLoad"
+                runat="server" ImageUrl="Images/save.gif" onclick="ImageButtonLoad_Click"/>
+            </div>
+        </div>
+        
+        <div class="button">
+            <div class="button-title">Clean Cache</div>
+            <div>
+                <asp:ImageButton ID="ImageButton1" runat="server" ImageUrl="Images/delete_all.gif" onClientClick="clearCache();return false;"/>
+            </div>
+        </div>
+
+        <div style="margin-top: 70px; margin-left: -75px;">
+            <b>Uploaded Notes</b>
+            <p/>
+            <asp:HiddenField ID="hidenUploadedFiles" ClientIDMode="Static" runat="server" Value="" />
+            <span id="LblChartMasterSearchResult"></span>
+
+            
+            <button id="refresh" name="btnSearchChartData" runat="server" type="button" onclick="showFileList_force();">Refresh</button>
+
+            <button id="btnSearchChartData" name="btnSearchChartData" runat="server" type="button" onclick="clearFiles();">Clean Files</button>
+        </div>
+
+    </div>
+
+    <div>
+        <asp:HiddenField ID="hidenBankDetails" ClientIDMode="Static" runat="server" Value=""/>
+        <asp:HiddenField ID="HiddenMailBody" ClientIDMode="Static" runat="server" Value=""/>
+        <asp:Panel ID="PanelDetails" CssClass="PopupCSS" runat="server">
+            <div>
+                <span id="bankDetailsTable"></span>
+                <br/>
+                <%--<span id="TextBoxBody2"></span>
+                <br/>--%>
+                <asp:Button ID="Button1" runat="server" Text="Send" OnClientClick="return ImageButtonSendEmail_ClientClick();" />
+                <asp:Button ID="ButtonDetailsCancel" runat="server" Text="Cancel" />
+            </div>
+        </asp:Panel>
+        <ajaxToolkit:ModalPopupExtender ID="MPE2" runat="server" TargetControlID="ImageButtonSendEmail"
+            PopupControlID="PanelDetails" BackgroundCssClass="modalBackground" DropShadow="true"
+             CancelControlID="ButtonDetailsCancel">
+        </ajaxToolkit:ModalPopupExtender>
+    </div>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var main = document.getElementById('main');
+            main.style.height = "1400px";
+
+            showFileList();
+        });
+
+        function showFileList() {
+            var chartList = document.getElementById('hidenUploadedFiles').value;
+            if (chartList) {
+                var jsonVal = jQuery.parseJSON(chartList);
+                var resultContent = "";
+                $('#LblChartMasterSearchResult').html("");
+                if (jsonVal) {
+                    jQuery.each(jsonVal, function (i, val) {
+                        resultContent = resultContent + "<tr> <td><a href='javascript:downloadFile(\"" + val.Name + "\");'>" + val.Name + "</a></td> <td> " + val.Size + " </td> </tr>";
+                    });
+                    resultContent = "<div style='width:220px; max-height:500px; overflow-y:scroll;'><table cellpadding='0' cellspacing='0' border='1'><thead><tr style='background-color: lightblue;'> <td width='160'>Name</td>  <td width='400'>Size</td> </tr></thead> <tbody>" + resultContent + "</tbody></table></div>";
+                    $('#LblChartMasterSearchResult').html(resultContent);
+                }
+            }
+        }
+
+        function showFileList_force() {
+            $.ajax({
+                type: "POST",
+                url: "invoicesend.aspx/set_hidenUploadedFiles",
+                data: {},
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    var result = JSON.parse(data.d);
+                    if (!result.success) {
+                        alert(result.message);
+                    } else 
+                    {
+                        document.getElementById('hidenUploadedFiles').value = result.message;
+                        showFileList();
+                    }
+                }
+            });
+
+        }
+
+        function downloadFile(fileName) {
+            __doPostBack('__Page', 'downloadFile|' + fileName);
+        }
+
+        function downloadFile2(fileName, type) {
+            __doPostBack('__Page', 'downloadFile2|' + fileName + "|" + type);
+        }
+
+        function clearFiles() {
+            $('#LblChartMasterSearchResult').html("");
+            $.ajax({
+                type: "POST",
+                url: "invoicesend.aspx/deleteNoteFiles",
+                data: {},
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    alert("All uploaded notes deleted!");
+                }
+            });
+        }
+
+        function clearCache() {
+            if (confirm("Use this function if: an invoice number stays the same but the invoice/statement content has changed")) {
+                $('#LblChartMasterSearchResult').html("");
+                $.ajax({
+                    type: "POST",
+                    url: "invoicesend.aspx/deleteCacheFiles",
+                    data: {},
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (msg) {
+                        alert("All Cache files delete. Please Create Attachment agian.");
+                    }
+                });
+            }
+        }
+
+
+    </script>
+</asp:Content>
