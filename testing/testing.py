@@ -1,5 +1,83 @@
 
 
+
+
+
+from smb.SMBConnection import SMBConnection
+conn = SMBConnection(
+			'sff_rm_sync',
+			'trustcodes_sff_tlc',
+			'tcas',
+			'TOE',
+			use_ntlm_v2 = True)
+assert conn.connect('192.168.1.4', 139)
+
+# fetch
+with open('/Users/teemo/Documents/Dev/scripts/the_lamb_company_db_scripts/nj/rm_data_from_invoke_20210607.csv', 'wb') as fp:
+    file_attributes, filesize = conn.retrieveFile('sff_db', '/nj/rm_data_from_invoke_20210607.csv', fp, timeout=30)
+with open('/Users/teemo/Documents/Dev/scripts/the_lamb_company_db_scripts/la/raw_mat_to_trustcode_20210603.csv', 'wb') as fp:
+    file_attributes, filesize = conn.retrieveFile('sff_db', '/la/split/raw_mat_to_trustcode_20210603.csv', fp, timeout=30)
+
+# in container fetch
+with open('/src/tce/rm_data_from_invoke_20210607.csv', 'wb') as fp:
+    file_attributes, filesize = conn.retrieveFile('sff_db', '/nj/rm_data_from_invoke_20210607.csv', fp, timeout=30)
+
+# delete
+conn.deleteFiles('sff_db', '/la/split/raw_mat_to_trustcode_20210604.csv', delete_matching_folders=False, timeout=30)
+
+# list
+fs = conn.listPath('sff_db', '/la')
+for f in fs:
+    f.filename
+    f.isDirectory
+
+
+import uuid
+print('a' + str(uuid.uuid4())[:8])
+
+import csv
+with open("/Users/teemo/Documents/Dev/scripts/the_lamb_company_db_scripts/la/raw_mat_to_trustcode_20210603.csv", mode='r', encoding='utf-8') as f:
+    a = [{k: v for k, v in row.items()}
+        for row in csv.DictReader(f, skipinitialspace=True)]
+
+with open("/Users/teemo/Documents/Dev/scripts/the_lamb_company_db_scripts/la/raw_mat_to_trustcode_20210603.csv", mode='r', encoding='utf-8') as f:
+    all_text = f.read()
+
+for scan in a:
+    print(scan['\ufeffproduction_lot'])
+    for key,value in scan.items():
+        print(f"{key}:{value}")
+
+
+import re
+if re.match('.*NUT?0?1.*', '210423C1 NUT1-3A'):
+    print(1)
+else:
+    print(0)
+print(re.match('.*NUT?0?1.*', '210423C1 NUT1-3A'))
+
+
+for i in range(10,0,-1):
+    print(i)
+    
+from collections import defaultdict
+def maximumPopulation(logs) -> int:
+    years = defaultdict(int)
+    for log in logs:
+        for i in range(log[0], log[1]):
+            years[i] += 1
+    years = sorted(years.items(), key=lambda item: item[1])
+    pop = years[-1][1]
+    re = float('inf')
+    for i in years:
+        if i[1] == pop:
+            re = min(re, i[0])
+    return re
+
+maximumPopulation([[1950,1961],[1960,1971],[1970,1981]])
+
+print ('0123456789'[:7])
+
 from shutil import copyfile
 import sys
 import re
