@@ -1,0 +1,26 @@
+curl -i -X GET "https://api-staging.trust.codes/api/products/list/" \
+-H "accept: application/json" \
+-H "authorization: Token H3Y7aGSE3UsJt3MFBUvtXym2Bo6iyoB5tWhKEvtf"
+
+
+
+curl -i -X POST \
+-H "Authorization: Token H3Y7aGSE3UsJt3MFBUvtXym2Bo6iyoB5tWhKEvtf" \
+-H "Content-Type: application/json" \
+-d '{"product":916, "number": "test_batch_000", "date_manufacturing": "2021-07-28",  "date_expiration": "2023-07-28"}' \
+"https://api-staging.trust.codes/api/products/batch/" 
+
+
+
+
+
+curl -i -X POST 'https://api-staging.trust.codes/api/products/batch/64529/activate_codes/' \
+-H 'Authorization: Token H3Y7aGSE3UsJt3MFBUvtXym2Bo6iyoB5tWhKEvtf' \
+-H 'Content-Type: application/json' \
+-H "accept: application/json" \
+-d '{"codes":[{"qr_id":"abCD1234", "data":{"print_time":"xxxx", "print_serial_number":"6"}}, {"qr_id":"GGCD3456", "data":{"print_time":"xxxx", "print_serial_number":"7"}]}' 
+
+
+
+
+curl -H 'Accept: application/json; indent=4' -u admin:123456 http://127.0.0.1:8000/users/
